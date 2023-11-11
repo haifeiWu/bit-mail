@@ -38,6 +38,12 @@ service User {
     };
   }
 
+  rpc GetUserDetailsByID (GetUserDetailsByIDRequest) returns (GetUserDetailsByIDReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/user/getUserDetails"
+    };
+  }
+
   rpc GetContactListByUserId (GetContactListByUserIdRequest) returns (GetContactListByUserIdReply) {
     option (google.api.http) = {
       get: "/bit-mail/contact/getContactListByUserId"
@@ -59,6 +65,26 @@ service User {
   }
 }
 
+message GetUserDetailsByIDRequest {
+  string user_id = 1;
+}
+
+message GetUserDetailsByIDReply {
+  message User {
+    string username = 2;
+    string email = 4;
+    string first_name = 5;
+    string last_name = 6;
+    string birth_date = 7;
+    string phone_number = 8;
+    string profile_photo = 9;
+    int32 gender = 12;
+  }
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  User data = 4;
+}
 
 message DelContactByUserIDRequest {
    string user_id = 1;

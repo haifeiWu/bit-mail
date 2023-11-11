@@ -174,6 +174,23 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/bitMail.v1.PingReply'
+    /bit-mail/user/getUserDetails:
+        get:
+            tags:
+                - User
+            operationId: User_GetUserDetailsByID
+            parameters:
+                - name: userId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.GetUserDetailsByIDReply'
     /bit-mail/user/listUser:
         get:
             tags:
@@ -329,6 +346,39 @@ components:
                     type: string
                 note:
                     type: string
+        bitMail.v1.GetUserDetailsByIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/bitMail.v1.GetUserDetailsByIDReply_User'
+        bitMail.v1.GetUserDetailsByIDReply_User:
+            type: object
+            properties:
+                username:
+                    type: string
+                email:
+                    type: string
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                birthDate:
+                    type: string
+                phoneNumber:
+                    type: string
+                profilePhoto:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
         bitMail.v1.ListMailMessageByUserIDReply:
             type: object
             properties:

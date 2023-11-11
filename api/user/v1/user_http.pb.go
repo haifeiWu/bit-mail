@@ -21,6 +21,7 @@ const _ = http.SupportPackageIsVersion1
 
 const OperationUserDelContactByUserID = "/bitMail.v1.User/DelContactByUserID"
 const OperationUserGetContactListByUserId = "/bitMail.v1.User/GetContactListByUserId"
+const OperationUserGetUserDetailsByID = "/bitMail.v1.User/GetUserDetailsByID"
 const OperationUserListUser = "/bitMail.v1.User/ListUser"
 const OperationUserLogin = "/bitMail.v1.User/Login"
 const OperationUserPing = "/bitMail.v1.User/Ping"
@@ -30,6 +31,7 @@ const OperationUserUploadContact = "/bitMail.v1.User/UploadContact"
 type UserHTTPServer interface {
 	DelContactByUserID(context.Context, *DelContactByUserIDRequest) (*DelContactByUserIDReply, error)
 	GetContactListByUserId(context.Context, *GetContactListByUserIdRequest) (*GetContactListByUserIdReply, error)
+	GetUserDetailsByID(context.Context, *GetUserDetailsByIDRequest) (*GetUserDetailsByIDReply, error)
 	// ListUser Sends a greeting
 	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
@@ -44,6 +46,7 @@ func RegisterUserHTTPServer(s *http.Server, srv UserHTTPServer) {
 	r.GET("/bit-mail/ping", _User_Ping0_HTTP_Handler(srv))
 	r.POST("/bit-mail/user/login", _User_Login0_HTTP_Handler(srv))
 	r.POST("/bit-mail/user/register", _User_Register0_HTTP_Handler(srv))
+	r.GET("/bit-mail/user/getUserDetails", _User_GetUserDetailsByID0_HTTP_Handler(srv))
 	r.GET("/bit-mail/contact/getContactListByUserId", _User_GetContactListByUserId0_HTTP_Handler(srv))
 	r.POST("/bit-mail/contact/uploadContact", _User_UploadContact0_HTTP_Handler(srv))
 	r.POST("/bit-mail/contact/delContactByUserID", _User_DelContactByUserID0_HTTP_Handler(srv))
@@ -131,6 +134,25 @@ func _User_Register0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) err
 	}
 }
 
+func _User_GetUserDetailsByID0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetUserDetailsByIDRequest
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationUserGetUserDetailsByID)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetUserDetailsByID(ctx, req.(*GetUserDetailsByIDRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*GetUserDetailsByIDReply)
+		return ctx.Result(200, reply)
+	}
+}
+
 func _User_GetContactListByUserId0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in GetContactListByUserIdRequest
@@ -197,6 +219,7 @@ func _User_DelContactByUserID0_HTTP_Handler(srv UserHTTPServer) func(ctx http.Co
 type UserHTTPClient interface {
 	DelContactByUserID(ctx context.Context, req *DelContactByUserIDRequest, opts ...http.CallOption) (rsp *DelContactByUserIDReply, err error)
 	GetContactListByUserId(ctx context.Context, req *GetContactListByUserIdRequest, opts ...http.CallOption) (rsp *GetContactListByUserIdReply, err error)
+	GetUserDetailsByID(ctx context.Context, req *GetUserDetailsByIDRequest, opts ...http.CallOption) (rsp *GetUserDetailsByIDReply, err error)
 	ListUser(ctx context.Context, req *ListUserRequest, opts ...http.CallOption) (rsp *ListUserReply, err error)
 	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginReply, err error)
 	Ping(ctx context.Context, req *PingRequest, opts ...http.CallOption) (rsp *PingReply, err error)
@@ -230,6 +253,19 @@ func (c *UserHTTPClientImpl) GetContactListByUserId(ctx context.Context, in *Get
 	pattern := "/bit-mail/contact/getContactListByUserId"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationUserGetContactListByUserId))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *UserHTTPClientImpl) GetUserDetailsByID(ctx context.Context, in *GetUserDetailsByIDRequest, opts ...http.CallOption) (*GetUserDetailsByIDReply, error) {
+	var out GetUserDetailsByIDReply
+	pattern := "/bit-mail/user/getUserDetails"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationUserGetUserDetailsByID))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

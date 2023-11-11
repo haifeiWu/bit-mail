@@ -6,17 +6,17 @@ package query
 
 import (
 	"context"
-	
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
-	
+
 	"gorm.io/gen"
 	"gorm.io/gen/field"
-	
+
 	"gorm.io/plugin/dbresolver"
-	
-	"bit-mail/pkg/model"
+
+	"bit-mail/cmd/script/model"
 )
 
 func newContact(db *gorm.DB, opts ...gen.DOOption) contact {
@@ -36,6 +36,8 @@ func newContact(db *gorm.DB, opts ...gen.DOOption) contact {
 	_contact.Note = field.NewString(tableName, "note")
 	_contact.CreatedAt = field.NewTime(tableName, "created_at")
 	_contact.UpdateAt = field.NewTime(tableName, "update_at")
+	_contact.ContactUserID = field.NewInt32(tableName, "contact_user_id")
+	_contact.IsDelete = field.NewInt32(tableName, "is_delete")
 
 	_contact.fillFieldMap()
 
@@ -45,16 +47,18 @@ func newContact(db *gorm.DB, opts ...gen.DOOption) contact {
 type contact struct {
 	contactDo
 
-	ALL          field.Asterisk
-	ID           field.Int32
-	UserID       field.Int32
-	ContactName  field.String
-	ContactEmail field.String
-	Address      field.String
-	PhoneNumber  field.String
-	Note         field.String
-	CreatedAt    field.Time
-	UpdateAt     field.Time
+	ALL           field.Asterisk
+	ID            field.Int32
+	UserID        field.Int32
+	ContactName   field.String
+	ContactEmail  field.String
+	Address       field.String
+	PhoneNumber   field.String
+	Note          field.String
+	CreatedAt     field.Time
+	UpdateAt      field.Time
+	ContactUserID field.Int32 // 用户通讯录好友的id
+	IsDelete      field.Int32 // 是否被删除1：未被删除，2：被删除
 
 	fieldMap map[string]field.Expr
 }
@@ -80,6 +84,8 @@ func (c *contact) updateTableName(table string) *contact {
 	c.Note = field.NewString(table, "note")
 	c.CreatedAt = field.NewTime(table, "created_at")
 	c.UpdateAt = field.NewTime(table, "update_at")
+	c.ContactUserID = field.NewInt32(table, "contact_user_id")
+	c.IsDelete = field.NewInt32(table, "is_delete")
 
 	c.fillFieldMap()
 
@@ -96,7 +102,7 @@ func (c *contact) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (c *contact) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 9)
+	c.fieldMap = make(map[string]field.Expr, 11)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["user_id"] = c.UserID
 	c.fieldMap["contact_name"] = c.ContactName
@@ -106,6 +112,8 @@ func (c *contact) fillFieldMap() {
 	c.fieldMap["note"] = c.Note
 	c.fieldMap["created_at"] = c.CreatedAt
 	c.fieldMap["update_at"] = c.UpdateAt
+	c.fieldMap["contact_user_id"] = c.ContactUserID
+	c.fieldMap["is_delete"] = c.IsDelete
 }
 
 func (c contact) clone(db *gorm.DB) contact {

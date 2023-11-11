@@ -24,6 +24,7 @@ type UserRepo interface {
 	GetContactListByUserId(ctx context.Context, userId string, friendName string, friendPhone string, friendEmail string) ([]model.Contact, error)
 	CreateContactInBatch(ctx context.Context, contacts []model.Contact) error
 	DeleteContactByUserID(ctx context.Context, userId string, friendIds []string) error
+	FindUserByID(ctx context.Context, userId string) (*model.User, error)
 }
 
 // UserUsecase is a Greeter usecase.
@@ -146,6 +147,21 @@ func (uc *UserUsecase) UploadContact(ctx context.Context, uploadContactRequest *
 		Data:    "",
 	}
 	
+	userId := uploadContactRequest.GetUserId()
+	reqContactList := uploadContactRequest.GetContactList()
+	for _, contant := range reqContactList {
+		contactList = append(contactList, model.Contact{
+			UserID:       cast.ToInt32(userId),
+			ContactName:  contant.GetContactName(),
+			ContactEmail: contant.GetContactEmail(),
+			Address:      contant.GetAddress(),
+			PhoneNumber:  contant.GetPhoneNumber(),
+			Note:         contant.GetNote(),
+			CreatedAt:    time.Time{},
+			UpdateAt:     time.Time{},
+		})
+	}
+	
 	err = uc.repo.CreateContactInBatch(ctx, contactList)
 	if err != nil {
 		reply.Stat = -1
@@ -176,5 +192,35 @@ func (uc *UserUsecase) DelContactByUserID(ctx context.Context, delContactByUserI
 	}
 	
 	reply.Message = "success"
+	return reply, nil
+}
+
+func (uc *UserUsecase) GetUserDetailsByID(ctx context.Context, detailsByIDRequest *v1.GetUserDetailsByIDRequest) (*v1.GetUserDetailsByIDReply, error) {
+	var err error
+	reply := &v1.GetUserDetailsByIDReply{
+		Stat:    0,
+		Code:    0,
+		Message: "",
+	}
+	user := &model.User{}
+	user, err = uc.repo.FindUserByID(ctx, detailsByIDRequest.GetUserId())
+	if err != nil {
+		reply.Stat = -1
+		reply.Code = -1
+		reply.Message = "failed"
+		return reply, err
+	}
+	
+	reply.Message = "success"
+	reply.Data = &v1.GetUserDetailsByIDReply_User{
+		Username:  user.Username,
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		// BirthDate:    user.BirthDate,
+		PhoneNumber: user.PhoneNumber,
+		// ProfilePhoto: user.ProfilePhoto,
+		Gender: user.Gender,
+	}
 	return reply, nil
 }

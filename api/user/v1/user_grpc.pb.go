@@ -23,6 +23,7 @@ const (
 	User_Ping_FullMethodName                   = "/bitMail.v1.User/Ping"
 	User_Login_FullMethodName                  = "/bitMail.v1.User/Login"
 	User_Register_FullMethodName               = "/bitMail.v1.User/Register"
+	User_GetUserDetailsByID_FullMethodName     = "/bitMail.v1.User/GetUserDetailsByID"
 	User_GetContactListByUserId_FullMethodName = "/bitMail.v1.User/GetContactListByUserId"
 	User_UploadContact_FullMethodName          = "/bitMail.v1.User/UploadContact"
 	User_DelContactByUserID_FullMethodName     = "/bitMail.v1.User/DelContactByUserID"
@@ -37,6 +38,7 @@ type UserClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingReply, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error)
+	GetUserDetailsByID(ctx context.Context, in *GetUserDetailsByIDRequest, opts ...grpc.CallOption) (*GetUserDetailsByIDReply, error)
 	GetContactListByUserId(ctx context.Context, in *GetContactListByUserIdRequest, opts ...grpc.CallOption) (*GetContactListByUserIdReply, error)
 	UploadContact(ctx context.Context, in *UploadContactRequest, opts ...grpc.CallOption) (*UploadContactReply, error)
 	DelContactByUserID(ctx context.Context, in *DelContactByUserIDRequest, opts ...grpc.CallOption) (*DelContactByUserIDReply, error)
@@ -86,6 +88,15 @@ func (c *userClient) Register(ctx context.Context, in *RegisterRequest, opts ...
 	return out, nil
 }
 
+func (c *userClient) GetUserDetailsByID(ctx context.Context, in *GetUserDetailsByIDRequest, opts ...grpc.CallOption) (*GetUserDetailsByIDReply, error) {
+	out := new(GetUserDetailsByIDReply)
+	err := c.cc.Invoke(ctx, User_GetUserDetailsByID_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userClient) GetContactListByUserId(ctx context.Context, in *GetContactListByUserIdRequest, opts ...grpc.CallOption) (*GetContactListByUserIdReply, error) {
 	out := new(GetContactListByUserIdReply)
 	err := c.cc.Invoke(ctx, User_GetContactListByUserId_FullMethodName, in, out, opts...)
@@ -122,6 +133,7 @@ type UserServer interface {
 	Ping(context.Context, *PingRequest) (*PingReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
+	GetUserDetailsByID(context.Context, *GetUserDetailsByIDRequest) (*GetUserDetailsByIDReply, error)
 	GetContactListByUserId(context.Context, *GetContactListByUserIdRequest) (*GetContactListByUserIdReply, error)
 	UploadContact(context.Context, *UploadContactRequest) (*UploadContactReply, error)
 	DelContactByUserID(context.Context, *DelContactByUserIDRequest) (*DelContactByUserIDReply, error)
@@ -143,6 +155,9 @@ func (UnimplementedUserServer) Login(context.Context, *LoginRequest) (*LoginRepl
 }
 func (UnimplementedUserServer) Register(context.Context, *RegisterRequest) (*RegisterReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedUserServer) GetUserDetailsByID(context.Context, *GetUserDetailsByIDRequest) (*GetUserDetailsByIDReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetailsByID not implemented")
 }
 func (UnimplementedUserServer) GetContactListByUserId(context.Context, *GetContactListByUserIdRequest) (*GetContactListByUserIdReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetContactListByUserId not implemented")
@@ -238,6 +253,24 @@ func _User_Register_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_GetUserDetailsByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserDetailsByIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).GetUserDetailsByID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: User_GetUserDetailsByID_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).GetUserDetailsByID(ctx, req.(*GetUserDetailsByIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _User_GetContactListByUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetContactListByUserIdRequest)
 	if err := dec(in); err != nil {
@@ -314,6 +347,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _User_Register_Handler,
+		},
+		{
+			MethodName: "GetUserDetailsByID",
+			Handler:    _User_GetUserDetailsByID_Handler,
 		},
 		{
 			MethodName: "GetContactListByUserId",

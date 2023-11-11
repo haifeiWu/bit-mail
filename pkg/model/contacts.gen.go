@@ -12,15 +12,17 @@ const TableNameContact = "contacts"
 
 // Contact mapped from table <contacts>
 type Contact struct {
-	ID           int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	UserID       int32     `gorm:"column:user_id" json:"user_id"`
-	ContactName  string    `gorm:"column:contact_name;not null" json:"contact_name"`
-	ContactEmail string    `gorm:"column:contact_email;not null" json:"contact_email"`
-	Address      string    `gorm:"column:address" json:"address"`
-	PhoneNumber  string    `gorm:"column:phone_number" json:"phone_number"`
-	Note         string    `gorm:"column:note" json:"note"`
-	CreatedAt    time.Time `gorm:"column:created_at;default:pg_systimestamp()" json:"created_at"`
-	UpdateAt     time.Time `gorm:"column:update_at;default:pg_systimestamp()" json:"update_at"`
+	ID            int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	UserID        int32     `gorm:"column:user_id" json:"user_id"`
+	ContactName   string    `gorm:"column:contact_name;not null" json:"contact_name"`
+	ContactEmail  string    `gorm:"column:contact_email;not null" json:"contact_email"`
+	Address       string    `gorm:"column:address" json:"address"`
+	PhoneNumber   string    `gorm:"column:phone_number" json:"phone_number"`
+	Note          string    `gorm:"column:note" json:"note"`
+	CreatedAt     time.Time `gorm:"column:created_at;default:pg_systimestamp()" json:"created_at"`
+	UpdateAt      time.Time `gorm:"column:update_at;default:pg_systimestamp()" json:"update_at"`
+	ContactUserID int32     `gorm:"column:contact_user_id;not null;comment:用户通讯录好友的id" json:"contact_user_id"`      // 用户通讯录好友的id
+	IsDelete      int32     `gorm:"column:is_delete;not null;default:1;comment:是否被删除1：未被删除，2：被删除" json:"is_delete"` // 是否被删除1：未被删除，2：被删除
 }
 
 // TableName Contact's table name

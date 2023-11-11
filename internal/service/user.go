@@ -55,3 +55,7 @@ func (s *UserService) UploadContact(ctx context.Context, req *pb.UploadContactRe
 func (s *UserService) DelContactByUserID(ctx context.Context, req *pb.DelContactByUserIDRequest) (*pb.DelContactByUserIDReply, error) {
 	return s.uc.DelContactByUserID(ctx, req)
 }
+
+func (s *UserService) GetUserDetailsByID(ctx context.Context, req *pb.GetUserDetailsByIDRequest) (*pb.GetUserDetailsByIDReply, error) {
+	return s.uc.GetUserDetailsByID(ctx, req)
+}
