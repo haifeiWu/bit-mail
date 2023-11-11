@@ -124,12 +124,12 @@ func (uc *UserUsecase) GetContactListByUserId(ctx context.Context, req *v1.GetCo
 	reply.Message = "success"
 	for _, contact := range contactList {
 		reapContact := &v1.GetContactListByUserIdReply_Contact{
-			UserId:       contact.UserID,
-			ContactName:  contact.ContactName,
-			ContactEmail: contact.ContactEmail,
-			Address:      contact.Address,
-			PhoneNumber:  contact.PhoneNumber,
-			Note:         contact.Note,
+			ContactUserId: contact.ContactUserID,
+			ContactName:   contact.ContactName,
+			ContactEmail:  contact.ContactEmail,
+			Address:       contact.Address,
+			PhoneNumber:   contact.PhoneNumber,
+			Note:          contact.Note,
 		}
 		
 		reply.Data = append(reply.Data, reapContact)

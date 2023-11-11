@@ -333,7 +333,7 @@ components:
         bitMail.v1.GetContactListByUserIdReply_Contact:
             type: object
             properties:
-                userId:
+                contactUserId:
                     type: integer
                     format: int32
                 contactName:
