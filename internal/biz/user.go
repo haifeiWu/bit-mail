@@ -89,7 +89,7 @@ func (uc *UserUsecase) Register(ctx context.Context, registerRequest *v1.Registe
 	}
 	
 	alreadyExistUser, err := uc.repo.FindUserByName(ctx, user.Username)
-	if alreadyExistUser != nil {
+	if alreadyExistUser.ID > 0 {
 		reply.Stat = 0
 		reply.Code = 2
 		reply.Message = user.Username + "该用户已存在"
