@@ -58,7 +58,8 @@ func (uc *UserUsecase) Login(ctx context.Context, username string, password stri
 		reply.Stat = -1
 		reply.Code = -1
 		reply.Message = "failed"
-		return reply, err
+		uc.log.WithContext(ctx).Errorf("FindUserByNameErr=%v", err)
+		return reply, nil
 	}
 	
 	if user.Password == password {
