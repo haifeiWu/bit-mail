@@ -45,7 +45,7 @@ func (u UserRepo) FindUserByName(ctx context.Context, username string) (*model.U
 	err = u.data.DB.WithContext(ctx).
 		Table(user.TableName()).
 		Where("username = ?", username).
-		First(&user).Error
+		Find(&user).Error
 	if err != nil {
 		return nil, err
 	}

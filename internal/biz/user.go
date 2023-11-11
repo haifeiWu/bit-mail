@@ -88,13 +88,23 @@ func (uc *UserUsecase) Register(ctx context.Context, registerRequest *v1.Registe
 		Data:    "",
 	}
 	
-	err := uc.repo.CreateUser(ctx, user)
+	alreadyExistUser, err := uc.repo.FindUserByName(ctx, user.Username)
+	if alreadyExistUser != nil {
+		reply.Stat = 0
+		reply.Code = 2
+		reply.Message = user.Username + "该用户已存在"
+		reply.Data = cast.ToString(alreadyExistUser.ID)
+		return reply, nil
+	}
+	
+	err = uc.repo.CreateUser(ctx, user)
 	if err != nil {
 		reply.Stat = -1
 		reply.Code = -1
 		reply.Message = "failed"
 		return reply, err
 	}
+	
 	reply.Message = "success"
 	return reply, nil
 }
