@@ -6,17 +6,17 @@ package query
 
 import (
 	"context"
-
+	
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/schema"
-
+	
 	"gorm.io/gen"
 	"gorm.io/gen/field"
-
+	
 	"gorm.io/plugin/dbresolver"
-
-	"bit-mail/cmd/script/model"
+	
+	"bit-mail/pkg/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {
