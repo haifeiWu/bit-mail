@@ -263,6 +263,8 @@ components:
         bitMail.v1.AddMailMessageByUserIDRequest:
             type: object
             properties:
+                userId:
+                    type: string
                 subject:
                     type: string
                 body:

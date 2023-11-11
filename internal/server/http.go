@@ -26,7 +26,7 @@ func NewHTTPServer(c *conf.Server, userService *service.UserService, mailService
 		http.Filter(
 			// 跨域处理
 			handlers.CORS(
-				handlers.AllowedHeaders([]string{"Content-Type", "x-token"}),
+				handlers.AllowedHeaders([]string{"*"}),
 				handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS", "DELETE"}),
 				handlers.AllowedOrigins([]string{"*"}))),
 	)

@@ -11,11 +11,6 @@ import (
 	"bit-mail/pkg/model"
 )
 
-// var (
-// 	// ErrUserNotFound is user not found.
-// 	ErrUserNotFound = errors.NotFound(v1.UserErrorReason_USER_NOT_FOUND_Err.String(), "user not found")
-// )
-
 // UserRepo is a Greater repo.
 type UserRepo interface {
 	ListAll(context.Context) ([]*model.User, error)
