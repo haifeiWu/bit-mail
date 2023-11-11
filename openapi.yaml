@@ -1,0 +1,526 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /bit-mail/contact/delContactByUserID:
+        post:
+            tags:
+                - User
+            operationId: User_DelContactByUserID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.DelContactByUserIDRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.DelContactByUserIDReply'
+    /bit-mail/contact/getContactListByUserId:
+        get:
+            tags:
+                - User
+            operationId: User_GetContactListByUserId
+            parameters:
+                - name: userId
+                  in: query
+                  schema:
+                    type: string
+                - name: friendName
+                  in: query
+                  schema:
+                    type: string
+                - name: friendEmail
+                  in: query
+                  schema:
+                    type: string
+                - name: friendPhone
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.GetContactListByUserIdReply'
+    /bit-mail/contact/uploadContact:
+        post:
+            tags:
+                - User
+            operationId: User_UploadContact
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.UploadContactRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.UploadContactReply'
+    /bit-mail/mail/addMailMessageByUserID:
+        post:
+            tags:
+                - MailMessage
+            description: Sends a greeting
+            operationId: MailMessage_AddMailMessageByUserID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.AddMailMessageByUserIDRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.AddMailMessageByUserIDReply'
+    /bit-mail/mail/delMailMessageByUserID:
+        get:
+            tags:
+                - MailMessage
+            description: Sends a greeting
+            operationId: MailMessage_DelMailMessageByUserID
+            parameters:
+                - name: messageId
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.DelMailMessageByUserIDReply'
+    /bit-mail/mail/listMailMessageByUserID:
+        get:
+            tags:
+                - MailMessage
+            description: Sends a greeting
+            operationId: MailMessage_ListMailMessageByUserID
+            parameters:
+                - name: userId
+                  in: query
+                  schema:
+                    type: string
+                - name: isDraft
+                  in: query
+                  schema:
+                    type: string
+                - name: isDelete
+                  in: query
+                  schema:
+                    type: string
+                - name: folder
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.ListMailMessageByUserIDReply'
+    /bit-mail/mail/updateMailMessageByUserID:
+        post:
+            tags:
+                - MailMessage
+            description: Sends a greeting
+            operationId: MailMessage_UpdateMailMessageByUserID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.UpdateMailMessageByUserIDRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.UpdateMailMessageByUserIDReply'
+    /bit-mail/ping:
+        get:
+            tags:
+                - User
+            operationId: User_Ping
+            parameters:
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.PingReply'
+    /bit-mail/user/listUser:
+        get:
+            tags:
+                - User
+            description: Sends a greeting
+            operationId: User_ListUser
+            parameters:
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.ListUserReply'
+    /bit-mail/user/login:
+        post:
+            tags:
+                - User
+            operationId: User_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.LoginReply'
+    /bit-mail/user/register:
+        post:
+            tags:
+                - User
+            operationId: User_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/bitMail.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/bitMail.v1.RegisterReply'
+components:
+    schemas:
+        bitMail.v1.AddMailMessageByUserIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+        bitMail.v1.AddMailMessageByUserIDRequest:
+            type: object
+            properties:
+                subject:
+                    type: string
+                body:
+                    type: string
+                senderId:
+                    type: integer
+                    format: uint32
+                sentAt:
+                    type: string
+                ccList:
+                    type: string
+                bccList:
+                    type: string
+                isDraft:
+                    type: boolean
+                isDeleted:
+                    type: boolean
+        bitMail.v1.DelContactByUserIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+        bitMail.v1.DelContactByUserIDRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                friendIds:
+                    type: array
+                    items:
+                        type: string
+        bitMail.v1.DelMailMessageByUserIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+        bitMail.v1.GetContactListByUserIdReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/bitMail.v1.GetContactListByUserIdReply_Contact'
+        bitMail.v1.GetContactListByUserIdReply_Contact:
+            type: object
+            properties:
+                userId:
+                    type: integer
+                    format: int32
+                contactName:
+                    type: string
+                contactEmail:
+                    type: string
+                address:
+                    type: string
+                phoneNumber:
+                    type: string
+                note:
+                    type: string
+        bitMail.v1.ListMailMessageByUserIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/bitMail.v1.ListMailMessageByUserIDReply_MailMessage'
+            description: The response message containing the greetings
+        bitMail.v1.ListMailMessageByUserIDReply_MailMessage:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                subject:
+                    type: string
+                body:
+                    type: string
+                senderId:
+                    type: integer
+                    format: uint32
+                sentAt:
+                    type: string
+                ccList:
+                    type: string
+                bccList:
+                    type: string
+                isDraft:
+                    type: boolean
+                isDeleted:
+                    type: boolean
+        bitMail.v1.ListUserReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+        bitMail.v1.LoginReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+            description: The response message containing the greetings
+        bitMail.v1.LoginRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+            description: The request message containing the user's name.
+        bitMail.v1.PingReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+            description: The response message containing the greetings
+        bitMail.v1.RegisterReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+            description: The response message containing the greetings
+        bitMail.v1.RegisterRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                birthDate:
+                    type: string
+                phoneNumber:
+                    type: string
+                profilePhoto:
+                    type: string
+                gender:
+                    type: integer
+                    format: int32
+            description: The request message containing the user's name.
+        bitMail.v1.UpdateMailMessageByUserIDReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+        bitMail.v1.UpdateMailMessageByUserIDRequest:
+            type: object
+            properties:
+                messageId:
+                    type: string
+                subject:
+                    type: string
+                body:
+                    type: string
+                senderId:
+                    type: integer
+                    format: uint32
+                sentAt:
+                    type: string
+                ccList:
+                    type: string
+                bccList:
+                    type: string
+                isDraft:
+                    type: boolean
+                isDeleted:
+                    type: boolean
+        bitMail.v1.UploadContactReply:
+            type: object
+            properties:
+                stat:
+                    type: number
+                    format: double
+                code:
+                    type: number
+                    format: double
+                message:
+                    type: string
+                data:
+                    type: string
+        bitMail.v1.UploadContactRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                contactList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/bitMail.v1.UploadContactRequest_Contact'
+        bitMail.v1.UploadContactRequest_Contact:
+            type: object
+            properties:
+                userId:
+                    type: integer
+                    format: int32
+                contactName:
+                    type: string
+                contactEmail:
+                    type: string
+                address:
+                    type: string
+                phoneNumber:
+                    type: string
+                note:
+                    type: string
+tags:
+    - name: MailMessage
+    - name: User
+      description: The greeting service definition.

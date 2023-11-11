@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package bitMail.v1;
+
+option go_package = "bit-mail.proto/api/bit-mail.proto/v1;v1";
+option java_multiple_files = true;
+option java_package = "BitMail.v1";
+option objc_class_prefix = "APIBitMailV1";
+
+enum UserErrorReason {
+  GREETER_UNSPECIFIED_Err = 0;
+  USER_NOT_FOUND_Err = 1;
+}

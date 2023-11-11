@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package bitMail.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "bit-mail.proto/api/bit-mail.proto/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.bit-mail.proto.v1";
+option java_outer_classname = "BitMailProtoV1";
+
+
+service MailMessage {
+  // Sends a greeting
+  rpc ListMailMessageByUserID (ListMailMessageByUserIDRequest) returns (ListMailMessageByUserIDReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/mail/listMailMessageByUserID"
+    };
+  }
+
+  // Sends a greeting
+  rpc AddMailMessageByUserID (AddMailMessageByUserIDRequest) returns (AddMailMessageByUserIDReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/mail/addMailMessageByUserID"
+      body: "*"
+    };
+  }
+
+  // Sends a greeting
+  rpc UpdateMailMessageByUserID (UpdateMailMessageByUserIDRequest) returns (UpdateMailMessageByUserIDReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/mail/updateMailMessageByUserID"
+      body: "*"
+    };
+  }
+
+  // Sends a greeting
+  rpc DelMailMessageByUserID (DelMailMessageByUserIDRequest) returns (DelMailMessageByUserIDReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/mail/delMailMessageByUserID"
+    };
+  }
+}
+
+message DelMailMessageByUserIDRequest {
+  string message_id = 1;
+}
+
+message DelMailMessageByUserIDReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+message UpdateMailMessageByUserIDRequest {
+  string message_id = 1;
+  string subject = 2;
+  string body = 3;
+  uint32 sender_id = 4;
+  string sent_at = 5;
+  string cc_list = 6;
+  string bcc_list = 7;
+  bool is_draft = 8;
+  bool is_deleted = 9;
+}
+
+message UpdateMailMessageByUserIDReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+message AddMailMessageByUserIDRequest {
+  string subject = 2;
+  string body = 3;
+  uint32 sender_id = 4;
+  string sent_at = 5;
+  string cc_list = 6;
+  string bcc_list = 7;
+  bool is_draft = 8;
+  bool is_deleted = 9;
+}
+
+message AddMailMessageByUserIDReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+// The request message containing the user's name.
+message ListMailMessageByUserIDRequest {
+  string user_id = 1;
+  string is_draft = 2; // 1：草稿，2：已发送
+  string is_delete = 3; //  1：已删除，2：未删除
+  string folder = 4; // 1：收件箱，2：发件箱，3：草稿，4：垃圾箱
+}
+
+// The response message containing the greetings
+message ListMailMessageByUserIDReply {
+  message MailMessage {
+    uint32 id = 1;
+    string subject = 2;
+    string body = 3;
+    uint32 sender_id = 4;
+    string sent_at = 5;
+    string cc_list = 6;
+    string bcc_list = 7;
+    bool is_draft = 8;
+    bool is_deleted = 9;
+  }
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  repeated MailMessage data = 4;
+}

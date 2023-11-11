@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package bitMail.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "bit-mail.proto/api/bit-mail.proto/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.bit-mail.proto.v1";
+option java_outer_classname = "BitMailProtoV1";
+
+// The greeting service definition.
+service User {
+  // Sends a greeting
+  rpc ListUser (ListUserRequest) returns (ListUserReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/user/listUser"
+    };
+  }
+
+  rpc Ping (PingRequest) returns (PingReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/ping"
+    };
+  }
+
+  rpc Login (LoginRequest) returns (LoginReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/user/login"
+      body: "*"
+    };
+  }
+
+  rpc Register (RegisterRequest) returns (RegisterReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/user/register"
+      body: "*"
+    };
+  }
+
+  rpc GetContactListByUserId (GetContactListByUserIdRequest) returns (GetContactListByUserIdReply) {
+    option (google.api.http) = {
+      get: "/bit-mail/contact/getContactListByUserId"
+    };
+  }
+
+  rpc UploadContact (UploadContactRequest) returns (UploadContactReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/contact/uploadContact"
+      body: "*"
+    };
+  }
+
+  rpc DelContactByUserID (DelContactByUserIDRequest) returns (DelContactByUserIDReply) {
+    option (google.api.http) = {
+      post: "/bit-mail/contact/delContactByUserID"
+      body: "*"
+    };
+  }
+}
+
+
+message DelContactByUserIDRequest {
+   string user_id = 1;
+   repeated string friend_ids = 2;
+}
+
+message DelContactByUserIDReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+message GetContactListByUserIdRequest {
+  string user_id = 1;
+  string friend_name = 2;
+  string friend_email = 3;
+  string friend_phone = 4;
+}
+
+message GetContactListByUserIdReply {
+  message Contact {
+    int32 user_id = 2;
+    string contact_name = 3;
+    string contact_email = 4;
+    string address = 5;
+    string phone_number = 6;
+    string note = 7;
+  }
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  repeated Contact data = 4;
+}
+
+message UploadContactRequest {
+  message Contact {
+    int32 user_id = 2;
+    string contact_name = 3;
+    string contact_email = 4;
+    string address = 5;
+    string phone_number = 6;
+    string note = 7;
+  }
+
+  string user_id = 1;
+  repeated Contact contact_list = 2;
+}
+
+message UploadContactReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+// The request message containing the user's name.
+message RegisterRequest {
+  string username = 2;
+  string password = 3;
+  string email = 4;
+  string first_name = 5;
+  string last_name = 6;
+  string birth_date = 7;
+  string phone_number = 8;
+  string profile_photo = 9;
+  int32 gender = 12;
+}
+
+// The response message containing the greetings
+message RegisterReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+// The request message containing the user's name.
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+// The response message containing the greetings
+message LoginReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
+
+// The request message containing the user's name.
+message ListUserRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message ListUserReply {
+  string message = 1;
+}
+
+// The request message containing the user's name.
+message PingRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message PingReply {
+  double stat = 1;
+  double code = 2;
+  string message = 3;
+  string data = 4;
+}
