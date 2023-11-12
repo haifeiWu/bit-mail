@@ -109,3 +109,23 @@ func (m MailRepo) AddMailMessageByUserID(ctx context.Context, userId string, dbE
 	tx.Commit()
 	return nil
 }
+
+func (m MailRepo) DelMailMessageByID(ctx context.Context, msgId int32) error {
+	mail := model.Email{}
+	userMail := model.UserEmail{}
+	
+	tx := m.data.DB.WithContext(ctx).Begin()
+	err := tx.Table(userMail.TableName()).Where("email_id = ?", msgId).Delete(&userMail).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	
+	err = tx.Table(mail.TableName()).Where("id = ?", msgId).Delete(&mail).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}

@@ -17,6 +17,7 @@ type MailRepo interface {
 	AddMailMessageByUserID(ctx context.Context, userId string, dbEmail *model.Email) error
 	ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model_dto.UserAndEmail, error)
 	UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email, read bool) error
+	DelMailMessageByID(ctx context.Context, msgId int32) error
 }
 
 // MailUsecase is a Greeter usecase.
@@ -128,5 +129,19 @@ func (u MailUsecase) UpdateMailMessageByUserID(ctx context.Context, req *v1.Upda
 }
 
 func (u MailUsecase) DelMailMessageByUserID(ctx context.Context, req *v1.DelMailMessageByUserIDRequest) (*v1.DelMailMessageByUserIDReply, error) {
-	return nil, nil
+	var (
+		err   error
+		reply = &v1.DelMailMessageByUserIDReply{
+			Stat:    0,
+			Code:    0,
+			Message: "",
+			Data:    "",
+		}
+	)
+	
+	err = u.repo.DelMailMessageByID(ctx, cast.ToInt32(req.GetMessageId()))
+	if err != nil {
+		return nil, err
+	}
+	return reply, nil
 }
