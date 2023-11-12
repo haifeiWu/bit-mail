@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"crypto/md5"
+	"fmt"
 	"time"
 	
 	"github.com/go-kratos/kratos/v2/log"
@@ -65,6 +66,9 @@ func (uc *UserUsecase) Login(ctx context.Context, username string, password stri
 		return reply, nil
 	}
 	
+	reply.Stat = 0
+	reply.Code = 2
+	reply.Message = "当前登录用户不存在"
 	return reply, nil
 }
 
@@ -235,8 +239,8 @@ func (uc *UserUsecase) GetUserDetailsByID(ctx context.Context, detailsByIDReques
 }
 
 func (uc *UserUsecase) genEncodePassword(ctx context.Context, password string) string {
-	hash := md5.New()
-	hash.Write([]byte(password))
-	encodePassword := string(hash.Sum(nil))
-	return encodePassword
+	data := []byte(password) // 切片
+	has := md5.Sum(data)
+	md5str := fmt.Sprintf("%x", has)
+	return md5str
 }
