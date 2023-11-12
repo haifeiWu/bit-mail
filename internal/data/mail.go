@@ -45,11 +45,26 @@ func (m MailRepo) ListMailMessageByUserID(ctx context.Context, userId string, fo
 }
 
 func (m MailRepo) UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email, read bool) error {
+	updateMap := make(map[string]interface{})
+	if dbModel.Subject != "" {
+		updateMap["subject"] = dbModel.Subject
+	}
+	if dbModel.Body != "" {
+		updateMap["body"] = dbModel.Body
+	}
+	
+	if dbModel.Img != "" {
+		updateMap["img"] = dbModel.Img
+	}
+	
+	if dbModel.ReceiverID != 0 {
+		updateMap["receiver_id"] = dbModel.ReceiverID
+	}
+	
 	tx := m.data.DB.WithContext(ctx).Begin()
 	err := tx.Table(dbModel.TableName()).
 		Where("id = ?", dbModel.ID).
-		Update("body = ?", dbModel.Body).
-		Update("subject=?", dbModel.Subject).Error
+		Updates(updateMap).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -58,8 +73,8 @@ func (m MailRepo) UpdateMailMessageByUserID(ctx context.Context, dbModel model.E
 	if read {
 		var userEmail model.UserEmail
 		err = tx.Table(userEmail.TableName()).
-			Update("is_read", true).
-			Where("email_id = ?", dbModel.ID).Error
+			Where("email_id = ?", dbModel.ID).
+			Update("is_read", true).Error
 		if err != nil {
 			tx.Rollback()
 			return err
