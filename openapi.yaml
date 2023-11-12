@@ -422,6 +422,8 @@ components:
                     type: boolean
                 isDeleted:
                     type: boolean
+                img:
+                    type: string
         bitMail.v1.ListUserReply:
             type: object
             properties:

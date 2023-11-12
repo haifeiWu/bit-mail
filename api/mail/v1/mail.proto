@@ -112,6 +112,7 @@ message ListMailMessageByUserIDReply {
     string bcc_list = 7;
     bool is_draft = 8;
     bool is_deleted = 9;
+    string img = 10;
   }
   double stat = 1;
   double code = 2;
