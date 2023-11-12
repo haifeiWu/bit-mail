@@ -414,14 +414,6 @@ components:
                     format: uint32
                 sentAt:
                     type: string
-                ccList:
-                    type: string
-                bccList:
-                    type: string
-                isDraft:
-                    type: boolean
-                isDeleted:
-                    type: boolean
                 img:
                     type: string
                 isRead:

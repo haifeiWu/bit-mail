@@ -83,17 +83,13 @@ func (u MailUsecase) ListMailMessageByUserID(ctx context.Context, req *v1.ListMa
 	}
 	for _, e := range emailList {
 		reply.Data = append(reply.Data, &v1.ListMailMessageByUserIDReply_MailMessage{
-			Id:        cast.ToUint32(e.EmailID),
-			Subject:   e.Subject,
-			Body:      e.Body,
-			SenderId:  cast.ToUint32(e.SenderID),
-			SentAt:    e.SentAt.String(),
-			CcList:    e.CcList,
-			BccList:   e.BccList,
-			IsDraft:   e.IsDraft,
-			IsDeleted: e.IsDeleted,
-			Img:       e.Img,
-			IsRead:    e.IsRead,
+			Id:       cast.ToUint32(e.EmailID),
+			Subject:  e.Subject,
+			Body:     e.Body,
+			SenderId: cast.ToUint32(e.SenderID),
+			SentAt:   e.SentAt.String(),
+			Img:      e.Img,
+			IsRead:   e.IsRead,
 		})
 	}
 	reply.Message = "success"
