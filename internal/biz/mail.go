@@ -9,12 +9,13 @@ import (
 	
 	"bit-mail/api/mail/v1"
 	"bit-mail/pkg/model"
+	"bit-mail/pkg/model_dto"
 )
 
 // MailRepo is a Greater repo.
 type MailRepo interface {
 	AddMailMessageByUserID(ctx context.Context, userId string, dbEmail *model.Email) error
-	ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model.Email, error)
+	ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model_dto.UserAndEmail, error)
 	UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email) error
 }
 
@@ -64,7 +65,7 @@ func (u MailUsecase) AddMailMessageByUserID(ctx context.Context, req *v1.AddMail
 func (u MailUsecase) ListMailMessageByUserID(ctx context.Context, req *v1.ListMailMessageByUserIDRequest) (*v1.ListMailMessageByUserIDReply, error) {
 	var (
 		err       error
-		emailList = make([]model.Email, 0)
+		emailList = make([]model_dto.UserAndEmail, 0)
 		reply     = &v1.ListMailMessageByUserIDReply{
 			Stat:    0,
 			Code:    0,
@@ -82,16 +83,17 @@ func (u MailUsecase) ListMailMessageByUserID(ctx context.Context, req *v1.ListMa
 	}
 	for _, e := range emailList {
 		reply.Data = append(reply.Data, &v1.ListMailMessageByUserIDReply_MailMessage{
-			Id:        cast.ToUint32(e.ID),
+			Id:        cast.ToUint32(e.EmailID),
 			Subject:   e.Subject,
 			Body:      e.Body,
 			SenderId:  cast.ToUint32(e.SenderID),
 			SentAt:    e.SentAt.String(),
 			CcList:    e.CcList,
 			BccList:   e.BccList,
-			IsDraft:   false,
-			IsDeleted: false,
+			IsDraft:   e.IsDraft,
+			IsDeleted: e.IsDeleted,
 			Img:       e.Img,
+			IsRead:    e.IsRead,
 		})
 	}
 	reply.Message = "success"

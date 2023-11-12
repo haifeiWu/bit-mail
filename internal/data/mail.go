@@ -8,6 +8,7 @@ import (
 	
 	"bit-mail/internal/biz"
 	"bit-mail/pkg/model"
+	"bit-mail/pkg/model_dto"
 )
 
 var _ biz.MailRepo = (*MailRepo)(nil)
@@ -25,25 +26,22 @@ func NewMailRepo(data *Data, logger log.Logger) biz.MailRepo {
 	}
 }
 
-func (m MailRepo) ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model.Email, error) {
-	userEmail := model.UserEmail{}
-	emIds := make([]string, 0)
+func (m MailRepo) ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model_dto.UserAndEmail, error) {
+	user := model.User{}
+	uae := make([]model_dto.UserAndEmail, 0)
 	err := m.data.DB.WithContext(ctx).
-		Table(userEmail.TableName()).
-		Select("email_id,is_read").
-		Joins("left join users on users.id = user_emails.recipient_id").
-		Find(&emIds).Error
+		Table(user.TableName()).
+		Select("user_emails.*, emails.*").
+		Where("users.id = ? and user_emails.folder = ?", userId, folder).
+		Joins("INNER JOIN user_emails ON users.id = user_emails.recipient_id").
+		Joins("INNER JOIN emails ON user_emails.email_id = emails.id").
+		// Joins("left join users on users.id = user_emails.recipient_id").
+		Find(&uae).Error
 	if err != nil {
 		return nil, err
 	}
 	
-	email := model.Email{}
-	emails := make([]model.Email, 0)
-	err = m.data.DB.WithContext(ctx).Table(email.TableName()).Where("id in (?)", emIds).Find(&emails).Error
-	if err != nil {
-		return nil, err
-	}
-	return emails, nil
+	return uae, nil
 }
 
 func (m MailRepo) UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email) error {
