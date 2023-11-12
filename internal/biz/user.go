@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"crypto/md5"
 	"time"
 	
 	"github.com/go-kratos/kratos/v2/log"
@@ -57,8 +58,8 @@ func (uc *UserUsecase) Login(ctx context.Context, username string, password stri
 		uc.log.WithContext(ctx).Errorf("FindUserByNameErr=%v", err)
 		return reply, nil
 	}
-	
-	if user.Password == password {
+	encodePassword := uc.genEncodePassword(ctx, password)
+	if user.Password == encodePassword {
 		reply.Message = "success"
 		reply.Data = cast.ToString(user.ID)
 		return reply, nil
@@ -70,9 +71,9 @@ func (uc *UserUsecase) Login(ctx context.Context, username string, password stri
 func (uc *UserUsecase) Register(ctx context.Context, registerRequest *v1.RegisterRequest) (*v1.RegisterReply, error) {
 	now := time.Now()
 	user := model.User{
-		ID:          0,
-		Username:    registerRequest.GetUsername(),
-		Password:    registerRequest.GetPassword(),
+		ID:       0,
+		Username: registerRequest.GetUsername(),
+		// Password:    registerRequest.GetPassword(),
 		Email:       registerRequest.GetEmail(),
 		FirstName:   registerRequest.GetFirstName(),
 		LastName:    registerRequest.GetLastName(),
@@ -88,6 +89,7 @@ func (uc *UserUsecase) Register(ctx context.Context, registerRequest *v1.Registe
 		Data:    "",
 	}
 	
+	user.Password = uc.genEncodePassword(ctx, registerRequest.GetPassword())
 	alreadyExistUser, err := uc.repo.FindUserByName(ctx, user.Username)
 	if alreadyExistUser.ID > 0 {
 		reply.Stat = 0
@@ -228,4 +230,11 @@ func (uc *UserUsecase) GetUserDetailsByID(ctx context.Context, detailsByIDReques
 		Gender: user.Gender,
 	}
 	return reply, nil
+}
+
+func (uc *UserUsecase) genEncodePassword(ctx context.Context, password string) string {
+	hash := md5.New()
+	hash.Write([]byte(password))
+	encodePassword := string(hash.Sum(nil))
+	return encodePassword
 }
