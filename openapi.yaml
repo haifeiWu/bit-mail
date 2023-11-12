@@ -263,25 +263,18 @@ components:
         bitMail.v1.AddMailMessageByUserIDRequest:
             type: object
             properties:
-                userId:
-                    type: string
                 subject:
                     type: string
                 body:
                     type: string
                 senderId:
                     type: integer
-                    format: uint32
+                    format: int32
                 sentAt:
                     type: string
-                ccList:
-                    type: string
-                bccList:
-                    type: string
-                isDraft:
-                    type: boolean
-                isDeleted:
-                    type: boolean
+                receiverId:
+                    type: integer
+                    format: int32
                 img:
                     type: string
         bitMail.v1.DelContactByUserIDReply:
@@ -411,13 +404,16 @@ components:
                     type: string
                 senderId:
                     type: integer
-                    format: uint32
+                    format: int32
                 sentAt:
                     type: string
                 img:
                     type: string
                 isRead:
                     type: boolean
+                receiverId:
+                    type: integer
+                    format: int32
         bitMail.v1.ListUserReply:
             type: object
             properties:
@@ -524,14 +520,10 @@ components:
                     format: uint32
                 sentAt:
                     type: string
-                ccList:
-                    type: string
-                bccList:
-                    type: string
-                isDraft:
+                isRead:
                     type: boolean
-                isDeleted:
-                    type: boolean
+                img:
+                    type: string
         bitMail.v1.UploadContactReply:
             type: object
             properties:

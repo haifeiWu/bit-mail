@@ -12,16 +12,17 @@ const TableNameEmail = "emails"
 
 // Email mapped from table <emails>
 type Email struct {
-	ID        int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
-	Subject   string    `gorm:"column:subject;not null" json:"subject"`
-	Body      string    `gorm:"column:body;not null" json:"body"`
-	SentAt    time.Time `gorm:"column:sent_at;default:pg_systimestamp()" json:"sent_at"`
-	CcList    string    `gorm:"column:cc_list" json:"cc_list"`
-	BccList   string    `gorm:"column:bcc_list" json:"bcc_list"`
-	IsDraft   bool      `gorm:"column:is_draft" json:"is_draft"`
-	IsDeleted bool      `gorm:"column:is_deleted" json:"is_deleted"`
-	SenderID  int32     `gorm:"column:sender_id" json:"sender_id"`
-	Img       string    `gorm:"column:img" json:"img"`
+	ID         int32     `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	Subject    string    `gorm:"column:subject;not null" json:"subject"`
+	Body       string    `gorm:"column:body;not null" json:"body"`
+	SentAt     time.Time `gorm:"column:sent_at;default:pg_systimestamp()" json:"sent_at"`
+	CcList     string    `gorm:"column:cc_list" json:"cc_list"`
+	BccList    string    `gorm:"column:bcc_list" json:"bcc_list"`
+	IsDraft    bool      `gorm:"column:is_draft" json:"is_draft"`
+	IsDeleted  bool      `gorm:"column:is_deleted" json:"is_deleted"`
+	SenderID   int32     `gorm:"column:sender_id" json:"sender_id"`
+	Img        string    `gorm:"column:img" json:"img"`
+	ReceiverID int32     `gorm:"column:receiver_id;comment:接受者id" json:"receiver_id"` // 接受者id
 }
 
 // TableName Email's table name

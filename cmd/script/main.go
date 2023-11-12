@@ -13,7 +13,7 @@ func main() {
 	})
 	
 	// gormdb, _ := gorm.Open(mysql.Open("root:@(127.0.0.1:3306)/demo?charset=utf8mb4&parseTime=True&loc=Local"))
-	gormdb, _ := gorm.Open(postgres.Open("host=192.168.3.30 user=gauss password=Gauss666 dbname=bit_mail port=5432 sslmode=disable TimeZone=Asia/Shanghai"), &gorm.Config{})
+	gormdb, _ := gorm.Open(postgres.Open("host=10.90.89.217 user=gauss password=Gauss666 dbname=bit_mail port=5432 sslmode=disable TimeZone=Asia/Shanghai"), &gorm.Config{})
 	g.UseDB(gormdb) // reuse your gorm db
 	
 	// Generate basic type-safe DAO API for struct `model.User` following conventions

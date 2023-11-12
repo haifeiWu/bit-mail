@@ -16,7 +16,7 @@ import (
 type MailRepo interface {
 	AddMailMessageByUserID(ctx context.Context, userId string, dbEmail *model.Email) error
 	ListMailMessageByUserID(ctx context.Context, userId string, folder string, isDraft string, isDelete string) ([]model_dto.UserAndEmail, error)
-	UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email) error
+	UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email, read bool) error
 }
 
 // MailUsecase is a Greeter usecase.
@@ -33,15 +33,12 @@ func NewMailUsecase(repo MailRepo, logger log.Logger) *MailUsecase {
 func (u MailUsecase) AddMailMessageByUserID(ctx context.Context, req *v1.AddMailMessageByUserIDRequest) (*v1.AddMailMessageByUserIDReply, error) {
 	var err error
 	dbEmail := &model.Email{
-		Subject:   req.GetSubject(),
-		Body:      req.GetBody(),
-		SenderID:  cast.ToInt32(req.GetSenderId()),
-		SentAt:    time.Time{},
-		CcList:    req.GetCcList(),
-		BccList:   req.GetBccList(),
-		IsDraft:   false,
-		IsDeleted: false,
-		Img:       req.GetImg(),
+		Subject:    req.GetSubject(),
+		Body:       req.GetBody(),
+		SenderID:   cast.ToInt32(req.GetSenderId()),
+		SentAt:     time.Time{},
+		Img:        req.GetImg(),
+		ReceiverID: req.GetReceiverId(),
 	}
 	
 	reply := &v1.AddMailMessageByUserIDReply{
@@ -51,7 +48,7 @@ func (u MailUsecase) AddMailMessageByUserID(ctx context.Context, req *v1.AddMail
 		Data:    "",
 	}
 	
-	err = u.repo.AddMailMessageByUserID(ctx, req.GetUserId(), dbEmail)
+	err = u.repo.AddMailMessageByUserID(ctx, cast.ToString(req.GetSenderId()), dbEmail)
 	if err != nil {
 		reply.Stat = -1
 		reply.Code = -1
@@ -86,7 +83,7 @@ func (u MailUsecase) ListMailMessageByUserID(ctx context.Context, req *v1.ListMa
 			Id:       cast.ToUint32(e.EmailID),
 			Subject:  e.Subject,
 			Body:     e.Body,
-			SenderId: cast.ToUint32(e.SenderID),
+			SenderId: e.SenderID,
 			SentAt:   e.SentAt.String(),
 			Img:      e.Img,
 			IsRead:   e.IsRead,
@@ -112,10 +109,12 @@ func (u MailUsecase) UpdateMailMessageByUserID(ctx context.Context, req *v1.Upda
 		ID:       cast.ToInt32(req.GetMessageId()),
 		Subject:  req.GetSubject(),
 		Body:     req.GetBody(),
+		SentAt:   time.Time{},
 		SenderID: cast.ToInt32(req.GetSenderId()),
+		Img:      req.GetImg(),
 	}
 	
-	err = u.repo.UpdateMailMessageByUserID(ctx, emailDbModel)
+	err = u.repo.UpdateMailMessageByUserID(ctx, emailDbModel, req.GetIsRead())
 	if err != nil {
 		reply.Stat = -1
 		reply.Code = -1
@@ -128,6 +127,5 @@ func (u MailUsecase) UpdateMailMessageByUserID(ctx context.Context, req *v1.Upda
 }
 
 func (u MailUsecase) DelMailMessageByUserID(ctx context.Context, req *v1.DelMailMessageByUserIDRequest) (*v1.DelMailMessageByUserIDReply, error) {
-	
 	return nil, nil
 }

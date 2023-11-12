@@ -59,10 +59,8 @@ message UpdateMailMessageByUserIDRequest {
   string body = 3;
   uint32 sender_id = 4;
   string sent_at = 5;
-  string cc_list = 6;
-  string bcc_list = 7;
-  bool is_draft = 8;
-  bool is_deleted = 9;
+  bool is_read = 6;
+  string img = 10;
 }
 
 message UpdateMailMessageByUserIDReply {
@@ -73,15 +71,11 @@ message UpdateMailMessageByUserIDReply {
 }
 
 message AddMailMessageByUserIDRequest {
-  string user_id = 1;
   string subject = 2;
   string body = 3;
-  uint32 sender_id = 4;
+  int32 sender_id = 4;
   string sent_at = 5;
-  string cc_list = 6;
-  string bcc_list = 7;
-  bool is_draft = 8;
-  bool is_deleted = 9;
+  int32 receiver_id = 6;
   string img = 10;
 }
 
@@ -106,10 +100,11 @@ message ListMailMessageByUserIDReply {
     uint32 id = 1;
     string subject = 2;
     string body = 3;
-    uint32 sender_id = 4;
+    int32 sender_id = 4;
     string sent_at = 5;
     string img = 10;
     bool is_read = 11;
+    int32 receiver_id = 12;
   }
   double stat = 1;
   double code = 2;

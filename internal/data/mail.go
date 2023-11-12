@@ -44,14 +44,29 @@ func (m MailRepo) ListMailMessageByUserID(ctx context.Context, userId string, fo
 	return uae, nil
 }
 
-func (m MailRepo) UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email) error {
-	err := m.data.DB.WithContext(ctx).Table(dbModel.TableName()).
+func (m MailRepo) UpdateMailMessageByUserID(ctx context.Context, dbModel model.Email, read bool) error {
+	tx := m.data.DB.WithContext(ctx).Begin()
+	err := tx.Table(dbModel.TableName()).
 		Where("id = ?", dbModel.ID).
 		Update("body = ?", dbModel.Body).
 		Update("subject=?", dbModel.Subject).Error
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
+	
+	if read {
+		var userEmail model.UserEmail
+		err = tx.Table(userEmail.TableName()).
+			Update("is_read", true).
+			Where("email_id = ?", dbModel.ID).Error
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+	
+	tx.Commit()
 	return nil
 }
 
