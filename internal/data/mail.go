@@ -66,10 +66,11 @@ func (m MailRepo) AddMailMessageByUserID(ctx context.Context, userId string, dbE
 	// 1：收件箱，2：发件箱，3：草稿，4：垃圾箱
 	userEmail := model.UserEmail{
 		EmailID:     dbEmail.ID,
-		RecipientID: cast.ToInt32(userId),
+		RecipientID: cast.ToInt32(dbEmail.SenderID),
 		IsRead:      false,
 		Folder:      2,
 	}
+	
 	err = tx.Table(userEmail.TableName()).Create(&userEmail).Error
 	if err != nil {
 		tx.Rollback()
