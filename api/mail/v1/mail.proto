@@ -82,6 +82,7 @@ message AddMailMessageByUserIDRequest {
   string bcc_list = 7;
   bool is_draft = 8;
   bool is_deleted = 9;
+  string img = 10;
 }
 
 message AddMailMessageByUserIDReply {

@@ -30,12 +30,13 @@ func newEmail(db *gorm.DB, opts ...gen.DOOption) email {
 	_email.ID = field.NewInt32(tableName, "id")
 	_email.Subject = field.NewString(tableName, "subject")
 	_email.Body = field.NewString(tableName, "body")
-	_email.SenderID = field.NewInt32(tableName, "sender_id")
 	_email.SentAt = field.NewTime(tableName, "sent_at")
 	_email.CcList = field.NewString(tableName, "cc_list")
 	_email.BccList = field.NewString(tableName, "bcc_list")
 	_email.IsDraft = field.NewBool(tableName, "is_draft")
 	_email.IsDeleted = field.NewBool(tableName, "is_deleted")
+	_email.SenderID = field.NewInt32(tableName, "sender_id")
+	_email.Img = field.NewString(tableName, "img")
 
 	_email.fillFieldMap()
 
@@ -49,12 +50,13 @@ type email struct {
 	ID        field.Int32
 	Subject   field.String
 	Body      field.String
-	SenderID  field.Int32
 	SentAt    field.Time
 	CcList    field.String
 	BccList   field.String
 	IsDraft   field.Bool
 	IsDeleted field.Bool
+	SenderID  field.Int32
+	Img       field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -74,12 +76,13 @@ func (e *email) updateTableName(table string) *email {
 	e.ID = field.NewInt32(table, "id")
 	e.Subject = field.NewString(table, "subject")
 	e.Body = field.NewString(table, "body")
-	e.SenderID = field.NewInt32(table, "sender_id")
 	e.SentAt = field.NewTime(table, "sent_at")
 	e.CcList = field.NewString(table, "cc_list")
 	e.BccList = field.NewString(table, "bcc_list")
 	e.IsDraft = field.NewBool(table, "is_draft")
 	e.IsDeleted = field.NewBool(table, "is_deleted")
+	e.SenderID = field.NewInt32(table, "sender_id")
+	e.Img = field.NewString(table, "img")
 
 	e.fillFieldMap()
 
@@ -96,16 +99,17 @@ func (e *email) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (e *email) fillFieldMap() {
-	e.fieldMap = make(map[string]field.Expr, 9)
+	e.fieldMap = make(map[string]field.Expr, 10)
 	e.fieldMap["id"] = e.ID
 	e.fieldMap["subject"] = e.Subject
 	e.fieldMap["body"] = e.Body
-	e.fieldMap["sender_id"] = e.SenderID
 	e.fieldMap["sent_at"] = e.SentAt
 	e.fieldMap["cc_list"] = e.CcList
 	e.fieldMap["bcc_list"] = e.BccList
 	e.fieldMap["is_draft"] = e.IsDraft
 	e.fieldMap["is_deleted"] = e.IsDeleted
+	e.fieldMap["sender_id"] = e.SenderID
+	e.fieldMap["img"] = e.Img
 }
 
 func (e email) clone(db *gorm.DB) email {

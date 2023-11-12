@@ -40,6 +40,7 @@ func (u MailUsecase) AddMailMessageByUserID(ctx context.Context, req *v1.AddMail
 		BccList:   req.GetBccList(),
 		IsDraft:   false,
 		IsDeleted: false,
+		Img:       req.GetImg(),
 	}
 	
 	reply := &v1.AddMailMessageByUserIDReply{
