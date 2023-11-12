@@ -154,18 +154,20 @@ func (uc *UserUsecase) UploadContact(ctx context.Context, uploadContactRequest *
 		Data:    "",
 	}
 	
+	now := time.Now()
 	userId := uploadContactRequest.GetUserId()
 	reqContactList := uploadContactRequest.GetContactList()
 	for _, contant := range reqContactList {
 		contactList = append(contactList, model.Contact{
-			UserID:       cast.ToInt32(userId),
-			ContactName:  contant.GetContactName(),
-			ContactEmail: contant.GetContactEmail(),
-			Address:      contant.GetAddress(),
-			PhoneNumber:  contant.GetPhoneNumber(),
-			Note:         contant.GetNote(),
-			CreatedAt:    time.Time{},
-			UpdateAt:     time.Time{},
+			UserID:        cast.ToInt32(userId),
+			ContactName:   contant.GetContactName(),
+			ContactEmail:  contant.GetContactEmail(),
+			Address:       contant.GetAddress(),
+			PhoneNumber:   contant.GetPhoneNumber(),
+			Note:          contant.GetNote(),
+			CreatedAt:     now,
+			UpdateAt:      now,
+			ContactUserID: contant.GetContactUserId(),
 		})
 	}
 	

@@ -30,7 +30,7 @@ func (m MailRepo) ListMailMessageByUserID(ctx context.Context, userId string, fo
 	emIds := make([]string, 0)
 	err := m.data.DB.WithContext(ctx).
 		Table(userEmail.TableName()).
-		Select("email_id").
+		Select("email_id,is_read").
 		Joins("left join users on users.id = user_emails.recipient_id").
 		Find(&emIds).Error
 	if err != nil {

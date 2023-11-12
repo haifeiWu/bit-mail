@@ -122,7 +122,7 @@ message GetContactListByUserIdReply {
 
 message UploadContactRequest {
   message Contact {
-    int32 user_id = 2;
+    int32 contact_user_id = 2;
     string contact_name = 3;
     string contact_email = 4;
     string address = 5;

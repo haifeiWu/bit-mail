@@ -563,7 +563,7 @@ components:
         bitMail.v1.UploadContactRequest_Contact:
             type: object
             properties:
-                userId:
+                contactUserId:
                     type: integer
                     format: int32
                 contactName:
